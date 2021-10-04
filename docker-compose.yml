@@ -60,8 +60,8 @@ services:
 
       EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "9ab60d"
 
-      # default dash pass
-      EMQX_MANAGEMENT_DEFAULT_USER_PASSWORD: "9ab60d"
+      # default APP secret
+      EMQX_MANAGEMENT_DEFAULT_APLICATION_SECRET: "public"
 
 
       ####### LOGIN AUTH 
