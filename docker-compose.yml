@@ -25,7 +25,8 @@ services:
 
   emqx:
     container_name: emqx
-    image: emqx/emqx:4.3.6
+    # image: emqx/emqx:4.3.6
+    image: emqx/emqx:4.2.4
     restart: always
     ports:
       #- ${emqxdashport}:18083
