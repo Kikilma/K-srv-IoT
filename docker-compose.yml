@@ -1,12 +1,12 @@
 version: "3.8"
 
-# volumes:
-#   vol-emqx-data:
-#     name: foo-emqx-data
-#   vol-emqx-etc:
-#     name: foo-emqx-etc
-#   vol-emqx-log:
-#     name: foo-emqx-log
+volumes:
+    vol-emqx-data:
+       name: foo-emqx-data
+  #   vol-emqx-etc:
+  #     name: foo-emqx-etc
+    vol-emqx-log:
+       name: foo-emqx-log
 
 services:
 
@@ -15,13 +15,13 @@ services:
     image: mongo:4.4
     restart: always
     environment:
-      TZ: "America/Costa_Rica"
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      TZ: "${TZ}"
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD}"
     volumes:
       - ./mongodata:/data/db
     ports:
-      - 27017:27017
+      - ${MONGO_EXT_PORT}:27017
 
   emqx:
     container_name: emqx
@@ -31,17 +31,15 @@ services:
     ports:
       #- ${emqxdashport}:18083
       - 18083:18083
-      - 18084:18084
       - 1883:1883
       - 8883:8883
-      - 8083:8083
-      - 8084:8084
+      - 8083:8083  
       - 8085:8081
 
-    # volumes:
-    #   - vol-emqx-data:/opt/emqx/data
+    volumes:
+      - vol-emqx-data:/opt/emqx/data
     #   - vol-emqx-etc:/opt/emqx/etc
-    #   - vol-emqx-log:/opt/emqx/log
+      - vol-emqx-log:/opt/emqx/log
 
 
     links: 
@@ -55,14 +53,14 @@ services:
       EMQX_NAME: kikilma
       EMQX_HOST: 127.0.0.1
 
-      TZ: "America/Costa_Rica"
+      TZ: "${TZ}"
 
       # default dash pass
 
-      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "9ab60d"
+      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "${EMQX_DEFAULT_USER__PASSWORD}"
 
       # default APP secret
-      EMQX_MANAGEMENT_DEFAULT_APLICATION_SECRET: "public"
+      EMQX_MANAGEMENT_DEFAULT_APLICATION_SECRET: "4{EMQX_DEFAULT_APLICATION_SECRET}"
 
 
       ####### LOGIN AUTH 
@@ -76,11 +74,11 @@ services:
       EMQX_AUTH__MONGO__TOPOLOGY__POOL_SIZE: 1
       EMQX_AUTH__MONGO__TOPOLOGY__MAX_OVERFLOW: 0
 
-      EMQX_AUTH__MONGO__SERVER: "mongo:27017"
+      EMQX_AUTH__MONGO__SERVER: "mongo:${MONGO_EXT_PORT}"
       EMQX_AUTH__MONGO__POOL: 8
 
-      EMQX_AUTH__MONGO__LOGIN: "root"
-      EMQX_AUTH__MONGO__PASSWORD: "example"
+      EMQX_AUTH__MONGO__LOGIN: "${MONGO_USERNAME}"
+      EMQX_AUTH__MONGO__PASSWORD: "${MONGO_PASSWORD}"
       EMQX_AUTH__MONGO__AUTH_SOURCE: admin
 
       EMQX_AUTH__MONGO__DATABASE: "kikilmaDB"
