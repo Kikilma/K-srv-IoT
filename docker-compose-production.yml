@@ -9,7 +9,6 @@ volumes:
     name: foo-emqx-log
 #
 
-
 services:
 
   node:
@@ -30,13 +29,13 @@ services:
 
     command: sh -c "echo 'delaying 30 seconds' && sleep 30 && npm run start"
     #command: sh -c "npm install"  
-    
 
   mongo:
     container_name: mongo
     image: mongo:4.4
     
     environment:
+
       TZ: "${TZ}"
       MONGO_INITDB_ROOT_USERNAME: "${MONGO_USERNAME}"
       MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD}"
@@ -60,16 +59,15 @@ services:
       - vol-emqx-data:/opt/emqx/data
     #   - vol-emqx-etc:/opt/emqx/etc
       - vol-emqx-log:/opt/emqx/log
-    #
-
+    
     links:
       - mongo
 
     extra_hosts:
-      - "localhost:192.168.0.6"
+      - "localhost:192.168.100.9"
 
     environment:
-      EMQX_NAME: KIKILMA
+      EMQX_NAME: KIKILMA IoT
       EMQX_HOST: 127.0.0.1
 
       TZ: "${TZ}"
